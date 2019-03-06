@@ -11,7 +11,7 @@ Refer to this [note](http://markdownnotes.com/app/#/?note=20819) to get the basi
 
 ### Code and Data
 
-- The `code` directory contains the code for the implementation of all the models described in the note.
+- The `modules` directory contains the code for the implementation of all the models described in the note.
 - The `examples` directory contains a jupyter notebook which demonstrates how the approach works in practice and a command line script to get all tokens in a document whitespace normalized.
 
 ### Contact
