@@ -18,4 +18,5 @@ Refer to this [note](http://markdownnotes.com/app/#/?note=20819) to get the basi
 sandeepsoni@gatech.edu
 
 ### TODO
-(a) Consider hosting the ngrams dictionary.
+(a) Put notebooks and scripts together.
+(b) Consider hosting the ngrams dictionary.
