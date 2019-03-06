@@ -18,5 +18,6 @@ Refer to this [note](http://markdownnotes.com/app/#/?note=20819) to get the basi
 sandeepsoni@gatech.edu
 
 ### TODO
-(a) Put notebooks and scripts together.
-(b) Consider hosting the ngrams dictionary.
+(a) Test the reimplemented code.
+(b) Put notebooks and scripts together.
+(c) Consider hosting the ngrams dictionary.
