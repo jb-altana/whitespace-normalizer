@@ -1,5 +1,9 @@
-from utils import readNgramsFromDict, segmentIntoTwoWords, getStandardized
-from utils import P, Pint, logP
+from .utils import readNgramsAsDict, segmentIntoTwoWords, getStandardized
+from .utils import P, Pint, logP
+
+import logging
+FORMAT="%(asctime)s %(levelname)s %(message)s"
+logging.basicConfig (format=FORMAT, level=logging.INFO)
 
 class NGramsNormalizer (object):
 	def __init__ (self, unigrams, bigrams, trigrams):
@@ -12,10 +16,13 @@ class NGramsNormalizer (object):
 		self.n3 = sum(self.g3.values())
 
 	@classmethod
-	def fromFiles (cls, unigrams_file, bigrams_file, trigrams_file):
-		g1 = readNgramsFromDict (unigrams_file)
-		g2 = readNgramsFromDict (bigrams_file)
-		g3 = readNgramsFromDict (trigrams_file)
+	def fromFiles (cls, unigrams_file, bigrams_file, trigrams_file, verbose=False):
+		g1 = readNgramsAsDict (unigrams_file)
+		if verbose: logging.info ("Unigrams loaded")
+		g2 = readNgramsAsDict (bigrams_file)
+		if verbose: logging.info ("Bigrams loaded")
+		g3 = readNgramsAsDict (trigrams_file)
+		if verbose: logging.info ("Trigrams loaded")
 		return NGramsNormalizer (g1, g2, g3)
 
 	def byLikelihoodRatio (self, token, smoothing=1, threshold=1):
@@ -28,7 +35,7 @@ class NGramsNormalizer (object):
 		return getStandardized (ratios, token, threshold=threshold)
 
 	def byContextualLikelihoodRatio (self, token, left_context, right_context, interpolation=False, bigram_lambdas=(0.9,0.1), trigram_lambdas=(0.7,0.2,0.1), smoothing=1, threshold=1):
-		def genNumLRNonInterpolated (lc, c1, c2, rc, lenV, smoothing):
+		def getNumLRNonInterpolated (lc, c1, c2, rc, lenV, smoothing):
 			num = P(self.g3[(c1,c2,rc)], self.g2[(c1,c2)], lenV, s=smoothing) * P(self.g3[(lc,c1,c2)], self.g2[(lc,c1)], lenV, s=smoothing) * P(self.g2[(lc,c1)], self.g1[(lc,)], lenV, s=smoothing)
 			return num
 

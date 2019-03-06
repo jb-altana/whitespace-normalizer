@@ -9,7 +9,7 @@ def readNgramsAsDict (filename):
 			grams[tuple(parts[0].split())] = int(parts[1])
 	return grams
 
-def segmentIntoTwoWords (token):
+def segmentIntoTwoWords (word):
 	for i,_ in enumerate (word):
 		part1, part2 = word[:i], word[i:]
 		if part1 != "" and part2 != "":
