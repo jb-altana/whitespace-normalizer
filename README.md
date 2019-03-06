@@ -16,3 +16,6 @@ Refer to this [note](http://markdownnotes.com/app/#/?note=20819) to get the basi
 
 ### Contact
 sandeepsoni@gatech.edu
+
+### TODO
+(a) Consider hosting the ngrams dictionary.
