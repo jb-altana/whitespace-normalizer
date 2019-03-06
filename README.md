@@ -18,7 +18,7 @@ Refer to this [note](http://markdownnotes.com/app/#/?note=20819) to see the basi
 sandeepsoni@gatech.edu
 
 ### TODO
-(a) Improve the readability of the code
-(b) Add a command line script to demonstrate how it works on a corpus on the entire document.
-(c) Include more description of the code in the README file.
-(d) Add evaluation scripts, annotations and results from the paper if it gets accepted.
+- Improve the readability of the code
+- Add a command line script to demonstrate how it works on a corpus on the entire document.
+- Include more description of the code in the README file.
+- Add evaluation scripts, annotations and results from the paper when accepted.
