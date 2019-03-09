@@ -16,8 +16,10 @@ def segmentIntoTwoWords (word):
 			yield part1, part2
 
 def getStandardized (ratios, token, threshold=1):
-	bc1, bc2, bratio = max (ratios, key=lambda x:x[2])
 	standardized = token
+	if len (ratios) == 0:
+		return standardized
+	bc1, bc2, bratio = max (ratios, key=lambda x:x[2])
 	if bratio > threshold:
 		standardized = " ".join ([bc1, bc2])
 

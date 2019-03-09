@@ -52,7 +52,6 @@ class NGramsNormalizer (object):
 			return denom
 
 		V = len (self.g1)
-
 		if not interpolation:
 			denom = getDenomLRNonInterpolated (left_context, token, right_context, V, smoothing)
 			ratios = [(c1, c2, getNumLRNonInterpolated (left_context, c1, c2, right_context, V, smoothing)/denom) 
@@ -63,3 +62,32 @@ class NGramsNormalizer (object):
 					  for c1,c2 in segmentIntoTwoWords (token)]
 		
 		return getStandardized (ratios, token, threshold=threshold)
+
+	def normalizeText (self, text, contextual=False, interpolation=False, bigram_lambdas=(0.9, 0.1), trigram_lambdas=(0.7, 0.2, 0.1), smoothing=1, threshold=1):
+		tokens = [token for token in text.split ()]
+		corrected_tokens = list ()
+		if len (tokens) == 0:
+			return corrected_tokens
+
+		if contextual:
+			# no context on the left, so use non-contextual likleihood ratio
+			if len (tokens) > 0:
+				correct = self.byLikelihoodRatio (tokens[0], smoothing=smoothing, threshold=threshold)
+				corrected_tokens.extend (correct.split())	
+
+			# use context to both the left and the right
+			for i in range (1, len(tokens) - 1):
+				lc = corrected_tokens[-1]
+				rc = tokens[i+1]
+				correct = self.byContextualLikelihoodRatio (tokens[i], lc, rc, interpolation=interpolation, bigram_lambdas=bigram_lambdas, trigram_lambdas=trigram_lambdas, smoothing=smoothing, threshold=threshold)	
+				corrected_tokens.extend (correct.split())
+
+			# no context on the right, so use non-contextual likelihood ratio
+			correct = self.byLikelihoodRatio (tokens[-1], smoothing=smoothing, threshold=threshold)
+			corrected_tokens.extend (correct.split())
+		else:
+			for token in tokens:
+				correct = self.byLikelihoodRatio (token, smoothing=1, threshold=1)
+				corrected_tokens.extend (correct.split())
+		
+		return " ".join (corrected_tokens)	
