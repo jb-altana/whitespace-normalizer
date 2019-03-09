@@ -4,7 +4,7 @@
 
 Given a non-standard term **t** (eg. _Senatoradmits_), split the term into two words **a** (Senator) and **b**(admits) such that both **a** and **b** are valid terms. 
 
-This project aims to build simple lightweight systems that uses N-gram counts and likelihood ratios to address this problem.
+This project aims to build simple lightweight systems that use N-gram counts and likelihood ratios to address this problem.
 
 ### Approach
 Refer to this [note](http://markdownnotes.com/app/#/?note=20819) to see the basic math of the underlying approach.
@@ -19,6 +19,5 @@ sandeepsoni@gatech.edu
 
 ### TODO
 - Improve the readability of the code
-- Add a command line script to demonstrate how it works on a corpus on the entire document.
 - Include more description of the code in the README file.
 - Add evaluation scripts, annotations and results from the paper when accepted.
