@@ -63,31 +63,53 @@ class NGramsNormalizer (object):
 		
 		return getStandardized (ratios, token, threshold=threshold)
 
-	def normalizeText (self, text, contextual=False, interpolation=False, bigram_lambdas=(0.9, 0.1), trigram_lambdas=(0.7, 0.2, 0.1), smoothing=1, threshold=1):
+	def normalizeText (self, text, contextual=False, interpolation=False, debug=False, bigram_lambdas=(0.9, 0.1), trigram_lambdas=(0.7, 0.2, 0.1), smoothing=1, threshold=1):
 		tokens = [token for token in text.split ()]
 		corrected_tokens = list ()
+		debug_dict = {"ntokens": len (tokens), "corrected_tokens": [], "ncorrected": 0}
 		if len (tokens) == 0:
-			return corrected_tokens
+			if debug:
+				return " ".join (corrected_tokens), debug_dict
+			else:
+				return " ".join (corrected_tokens)
 
 		if contextual:
 			# no context on the left, so use non-contextual likleihood ratio
 			if len (tokens) > 0:
 				correct = self.byLikelihoodRatio (tokens[0], smoothing=smoothing, threshold=threshold)
+				if correct != tokens[0]: 
+					debug_dict["corrected_tokens"].append ((tokens[0], correct))
+					debug_dict["ncorrected"] += 1
 				corrected_tokens.extend (correct.split())	
 
 			# use context to both the left and the right
 			for i in range (1, len(tokens) - 1):
+				if not tokens[i].isalpha():
+					corrected_tokens.extend (tokens[i])
+					continue
 				lc = corrected_tokens[-1]
 				rc = tokens[i+1]
 				correct = self.byContextualLikelihoodRatio (tokens[i], lc, rc, interpolation=interpolation, bigram_lambdas=bigram_lambdas, trigram_lambdas=trigram_lambdas, smoothing=smoothing, threshold=threshold)	
+				if correct != tokens[i]: 
+					debug_dict["corrected_tokens"].append ((tokens[i], correct))
+					debug_dict["ncorrected"] += 1
 				corrected_tokens.extend (correct.split())
 
 			# no context on the right, so use non-contextual likelihood ratio
 			correct = self.byLikelihoodRatio (tokens[-1], smoothing=smoothing, threshold=threshold)
+			if correct != tokens[-1]: 
+				debug_dict["corrected_tokens"].append ((tokens[-1], correct))
+				debug_dict["ncorrected"] += 1
 			corrected_tokens.extend (correct.split())
 		else:
 			for token in tokens:
 				correct = self.byLikelihoodRatio (token, smoothing=1, threshold=1)
+				if correct != token: 
+					debug_dict["corrected_tokens"].append ((token, correct))
+					debug_dict["ncorrected"] += 1
 				corrected_tokens.extend (correct.split())
 		
-		return " ".join (corrected_tokens)	
+		if debug:
+			return " ".join (corrected_tokens), debug_dict
+		else:
+			return " ".join (corrected_tokens)	
