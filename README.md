@@ -18,6 +18,7 @@ Refer to this [note](http://markdownnotes.com/app/#/?note=20819) to see the basi
 sandeepsoni@gatech.edu
 
 ### TODO
-- Improve the readability of the code
+- Update this README about the organization of the code once its stable.
+- Improve the readability of the code.
 - Include more description of the code in the README file.
 - Add evaluation scripts, annotations and results from the paper when accepted.
