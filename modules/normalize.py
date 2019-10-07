@@ -25,14 +25,14 @@ class NGramsNormalizer (object):
 		if verbose: logging.info ("Trigrams loaded")
 		return NGramsNormalizer (g1, g2, g3)
 
-	def byLikelihoodRatio (self, token, smoothing=1, threshold=1):
+	def byLikelihoodRatio (self, token, smoothing=1, threshold=1, return_ratio=False):
 		V = len (self.g1)
 
 		denom = P(self.g1[(token,)], self.n1, V, s=smoothing)
 		ratios = [(c1,c2,P(self.g2[(c1,c2)], self.n2, V*V, s=smoothing)/denom)
 				  for c1,c2 in segmentIntoTwoWords (token)]
 
-		return getStandardized (ratios, token, threshold=threshold)
+		return getStandardized (ratios, token, threshold=threshold, return_ratio=return_ratio)
 
 	def byContextualLikelihoodRatio (self, token, left_context, right_context, interpolation=False, bigram_lambdas=(0.9,0.1), trigram_lambdas=(0.7,0.2,0.1), smoothing=1, threshold=1):
 		def getNumLRNonInterpolated (lc, c1, c2, rc, lenV, smoothing):
@@ -63,7 +63,7 @@ class NGramsNormalizer (object):
 		
 		return getStandardized (ratios, token, threshold=threshold)
 
-	def normalizeText (self, text, contextual=False, interpolation=False, debug=False, bigram_lambdas=(0.9, 0.1), trigram_lambdas=(0.7, 0.2, 0.1), smoothing=1, threshold=1):
+	def normalizeText (self, text, keep_words={}, contextual=False, interpolation=False, debug=False, bigram_lambdas=(0.9, 0.1), trigram_lambdas=(0.7, 0.2, 0.1), smoothing=1, threshold=1):
 		tokens = [token for token in text.split ()]
 		corrected_tokens = list ()
 		debug_dict = {"ntokens": len (tokens), "corrected_tokens": [], "ncorrected": 0}
@@ -76,7 +76,10 @@ class NGramsNormalizer (object):
 		if contextual:
 			# no context on the left, so use non-contextual likleihood ratio
 			if len (tokens) > 0:
-				correct = self.byLikelihoodRatio (tokens[0], smoothing=smoothing, threshold=threshold)
+				if tokens[0] in keep_words:
+					correct = tokens[0]
+				else:
+					correct = self.byLikelihoodRatio (tokens[0], smoothing=smoothing, threshold=threshold)
 				if correct != tokens[0]: 
 					debug_dict["corrected_tokens"].append ((tokens[0], correct))
 					debug_dict["ncorrected"] += 1
@@ -87,6 +90,10 @@ class NGramsNormalizer (object):
 				if not tokens[i].isalpha():
 					corrected_tokens.extend (tokens[i])
 					continue
+				if tokens[i] in keep_words:
+					corrected_tokens.extend (tokens[i])
+					continue
+
 				lc = corrected_tokens[-1]
 				rc = tokens[i+1]
 				correct = self.byContextualLikelihoodRatio (tokens[i], lc, rc, interpolation=interpolation, bigram_lambdas=bigram_lambdas, trigram_lambdas=trigram_lambdas, smoothing=smoothing, threshold=threshold)	
@@ -96,14 +103,20 @@ class NGramsNormalizer (object):
 				corrected_tokens.extend (correct.split())
 
 			# no context on the right, so use non-contextual likelihood ratio
-			correct = self.byLikelihoodRatio (tokens[-1], smoothing=smoothing, threshold=threshold)
+			if tokens[-1] in keep_words:
+				correct = tokens[-1]
+			else:
+				correct = self.byLikelihoodRatio (tokens[-1], smoothing=smoothing, threshold=threshold)
 			if correct != tokens[-1]: 
 				debug_dict["corrected_tokens"].append ((tokens[-1], correct))
 				debug_dict["ncorrected"] += 1
 			corrected_tokens.extend (correct.split())
 		else:
 			for token in tokens:
-				correct = self.byLikelihoodRatio (token, smoothing=1, threshold=1)
+				if token in keep_words:
+					correct = token
+				else:
+					correct = self.byLikelihoodRatio (token, smoothing=1, threshold=1)
 				if correct != token: 
 					debug_dict["corrected_tokens"].append ((token, correct))
 					debug_dict["ncorrected"] += 1

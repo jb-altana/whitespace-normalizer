@@ -15,7 +15,7 @@ def segmentIntoTwoWords (word):
 		if part1 != "" and part2 != "":
 			yield part1, part2
 
-def getStandardized (ratios, token, threshold=1):
+def getStandardized (ratios, token, threshold=1, return_ratio=False):
 	standardized = token
 	if len (ratios) == 0:
 		return standardized
@@ -23,7 +23,10 @@ def getStandardized (ratios, token, threshold=1):
 	if bratio > threshold:
 		standardized = " ".join ([bc1, bc2])
 
-	return standardized
+	if return_ratio:
+		return standardized, bratio
+	else:
+		return standardized
 
 def P (num, denom, V, s=1):
 	return (num + s) / (denom + (V*s))
