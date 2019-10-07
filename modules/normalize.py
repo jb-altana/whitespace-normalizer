@@ -76,7 +76,7 @@ class NGramsNormalizer (object):
 		if contextual:
 			# no context on the left, so use non-contextual likleihood ratio
 			if len (tokens) > 0:
-				if tokens[0] in keep_words:
+				if len (keep_words) > 0 and tokens[0] in keep_words:
 					correct = tokens[0]
 				else:
 					correct = self.byLikelihoodRatio (tokens[0], smoothing=smoothing, threshold=threshold)
@@ -90,7 +90,7 @@ class NGramsNormalizer (object):
 				if not tokens[i].isalpha():
 					corrected_tokens.extend (tokens[i])
 					continue
-				if tokens[i] in keep_words:
+				if len (keep_words) > 0 and tokens[i] in keep_words:
 					corrected_tokens.extend (tokens[i])
 					continue
 
@@ -103,7 +103,7 @@ class NGramsNormalizer (object):
 				corrected_tokens.extend (correct.split())
 
 			# no context on the right, so use non-contextual likelihood ratio
-			if tokens[-1] in keep_words:
+			if len (keep_words) > 0 and tokens[-1] in keep_words:
 				correct = tokens[-1]
 			else:
 				correct = self.byLikelihoodRatio (tokens[-1], smoothing=smoothing, threshold=threshold)
@@ -113,7 +113,7 @@ class NGramsNormalizer (object):
 			corrected_tokens.extend (correct.split())
 		else:
 			for token in tokens:
-				if token in keep_words:
+				if len(keep_words) > 0 and token in keep_words:
 					correct = token
 				else:
 					correct = self.byLikelihoodRatio (token, smoothing=1, threshold=1)

@@ -11,4 +11,4 @@ G1_FILE=$GRAM_DIR/en.1M.filtered.1g
 G2_FILE=$GRAM_DIR/en.1M.filtered.2g
 G3_FILE=$GRAM_DIR/en.1M.filtered.3g
 
-parallel python -u ws_normalize.py --srcdir $SRC_PARENT/{} --tgtdir $TGT_PARENT/{} --gramfiles $G1_FILE $G2_FILE $G2_FILE --debugfile $TGT_PARENT/{}/summary.jsonl ::: $(ls $SRC_PARENT) 
+parallel python -u ws_normalize.py --srcdir $SRC_PARENT/{} --tgtdir $TGT_PARENT/{} --gramfiles $G1_FILE $G2_FILE $G2_FILE --debugfile $TGT_PARENT/{}/summary.jsonl --keepfile keep.list ::: $(ls $SRC_PARENT) 
