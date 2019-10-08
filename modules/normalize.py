@@ -88,10 +88,10 @@ class NGramsNormalizer (object):
 			# use context to both the left and the right
 			for i in range (1, len(tokens) - 1):
 				if not tokens[i].isalpha():
-					corrected_tokens.extend (tokens[i])
+					corrected_tokens.append (tokens[i])
 					continue
 				if len (keep_words) > 0 and tokens[i] in keep_words:
-					corrected_tokens.extend (tokens[i])
+					corrected_tokens.append (tokens[i])
 					continue
 
 				lc = corrected_tokens[-1]
