@@ -36,7 +36,7 @@ def P(num, denom, V, s=1):
 
 
 def Pint(probs, lambdas):
-    return sum([lambdas[i] * probs[i] for i in range(len(probs))])
+    return sum(lambdas[i] * probs[i] for i in range(len(probs)))
 
 
 def logP(num, denom, V, s=1):

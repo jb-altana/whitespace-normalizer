@@ -6,7 +6,7 @@ FORMAT = "%(asctime)s %(levelname)s %(message)s"
 logging.basicConfig(format=FORMAT, level=logging.INFO)
 
 
-class NGramsNormalizer(object):
+class NGramsNormalizer:
     def __init__(self, unigrams, bigrams, trigrams):
         self.g1 = unigrams
         self.g2 = bigrams

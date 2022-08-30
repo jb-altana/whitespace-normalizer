@@ -61,7 +61,7 @@ def main():
     os.makedirs(args.tgtdir, exist_ok=True)
     gramfiles = args.gramfiles
     grams = NGramsNormalizer.fromFiles(gramfiles[0], gramfiles[1], gramfiles[2], verbose=True)
-    logging.info("Begin processing files in {0}".format(args.srcdir))
+    logging.info(f"Begin processing files in {args.srcdir}")
     keep_words = set()
     if args.keepfile is not None:
         with open(args.keepfile) as fin:
@@ -83,10 +83,10 @@ def main():
                 debug_dict["filename"] = os.path.join(srcsubdir, filename)
                 with safe_open_w(os.path.join(tgtsubdir, filename)) as fout:
                     fout.write(corrected_text + "\n")
-                dout.write("{0}\n".format(json.dumps(debug_dict)))
-            logging.info("Finished processing {1} files in {0}".format(srcsubdir, len(files)))
+                dout.write(f"{json.dumps(debug_dict)}\n")
+            logging.info(f"Finished processing {len(files)} files in {srcsubdir}")
             nFiles += len(files)
-    logging.info("Finished processing all {1} files in {0}".format(args.srcdir, nFiles))
+    logging.info(f"Finished processing all {nFiles} files in {args.srcdir}")
 
 
 if __name__ == "__main__":
