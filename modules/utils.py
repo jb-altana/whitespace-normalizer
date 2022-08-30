@@ -1,3 +1,4 @@
+"""Helpers for whitespace normalization"""
 from collections import defaultdict
 from math import log
 

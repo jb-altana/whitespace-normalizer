@@ -1,12 +1,15 @@
+"""Implementation of an NGramsNormalizer"""
 from .utils import readNgramsAsDict, segmentIntoTwoWords, getStandardized
-from .utils import P, Pint, logP
+from .utils import P, Pint
 import logging
 
 FORMAT = "%(asctime)s %(levelname)s %(message)s"
 logging.basicConfig(format=FORMAT, level=logging.INFO)
 
+logger = logging.getLogger(__name__)
 
 class NGramsNormalizer:
+    """Implementation of an NGramsNormalizer"""
     def __init__(self, unigrams, bigrams, trigrams):
         self.g1 = unigrams
         self.g2 = bigrams
@@ -18,14 +21,15 @@ class NGramsNormalizer:
     @classmethod
     def fromFiles(cls, unigrams_file, bigrams_file, trigrams_file, verbose=False):
         g1 = readNgramsAsDict(unigrams_file)
+        before_level = logger.getEffectiveLevel()
         if verbose:
-            logging.info("Unigrams loaded")
+            logger.setLevel(logging.INFO)
+        logger.info("Unigrams loaded")
         g2 = readNgramsAsDict(bigrams_file)
-        if verbose:
-            logging.info("Bigrams loaded")
+        logger.info("Bigrams loaded")
         g3 = readNgramsAsDict(trigrams_file)
-        if verbose:
-            logging.info("Trigrams loaded")
+        logger.info("Trigrams loaded")
+        logger.setLevel(before_level)
         return NGramsNormalizer(g1, g2, g3)
 
     def byLikelihoodRatio(self, token, smoothing=1, threshold=1, return_ratio=False):
